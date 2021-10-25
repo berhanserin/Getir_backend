@@ -1,7 +1,7 @@
 const express = require('express')
 const route = express.Router()
-const asyncHandler = require('express-async-handler')
+const { userController } = require('../controller/index')
 
-route.get(asyncHandler(async (req, res) => {}))
+route.route('/').post(userController.adduser)
 
 module.exports = route
