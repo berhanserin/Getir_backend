@@ -46,7 +46,7 @@ const validate = (users) => {
     return schema.validate(users)
 }
 
-UserSchema.pre('save', function (err, next) {
+UserSchema.pre('save', function (next) {
     if (this.isNew) {
         this.constructor.find({}).then((result) => {
             this._id = result.length
