@@ -1,3 +1,3 @@
-const adduser = require('./post')
+const { post, setAvatar } = require('./post')
 
-module.exports = { adduser }
+module.exports = { post, setAvatar }

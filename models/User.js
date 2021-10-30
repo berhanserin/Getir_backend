@@ -1,6 +1,7 @@
 const mongoose = require('mongoose')
 const Joi = require('joi')
 const Schema = mongoose.Schema
+const bcrypt = require('bcryptjs')
 
 const { Number, String } = Schema.Types
 
@@ -30,6 +31,7 @@ const UserSchema = new Schema(
             trim: true,
             lowercase: true,
         },
+        avatar: { type: String, default: 'default.jpeg' },
         sifre: { type: String, required: true, trim: true },
     },
     { collection: 'Kullanıcılar', timestamps: true }
@@ -53,6 +55,19 @@ UserSchema.pre('save', function (next) {
             next()
         })
     }
+    if (!this.isModified('sifre')) {
+        next()
+    }
+    bcrypt.genSalt(10, (err, salt) => {
+        if (err) next(err)
+        bcrypt.hash(this.sifre, salt, (err, hash) => {
+            if (err) next(err)
+
+            this.sifre = hash
+        })
+    })
 })
+
 var User = mongoose.model('Users', UserSchema)
+
 module.exports = { User, validate }

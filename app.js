@@ -19,7 +19,7 @@ app.use('/api', mainRouter)
 app.use(customHandler)
 
 connectDatabase(DATABASE_URL, DB_NAME)
-
+app.use(express.static(__dirname + '/files'))
 app.listen(PORT, () => {
     console.log(`🚀 Server uçtu`)
 })
