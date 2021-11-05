@@ -1,5 +1,6 @@
 const mongoose = require('mongoose')
 const Joi = require('joi')
+const jwt = require('jsonwebtoken')
 const Schema = mongoose.Schema
 const bcrypt = require('bcryptjs')
 
@@ -52,18 +53,20 @@ UserSchema.pre('save', function (next) {
     if (this.isNew) {
         this.constructor.find({}).then((result) => {
             this._id = result.length
-            next()
+            return next()
         })
     }
     if (!this.isModified('sifre')) {
-        next()
+        return next()
     }
+
     bcrypt.genSalt(10, (err, salt) => {
         if (err) next(err)
         bcrypt.hash(this.sifre, salt, (err, hash) => {
             if (err) next(err)
 
             this.sifre = hash
+            return next()
         })
     })
 })
